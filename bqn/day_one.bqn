@@ -22,4 +22,3 @@ Nums ← {
 }
 y ← +´A¨Nums¨d
 •Show y
-
