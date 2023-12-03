@@ -11,3 +11,6 @@ Parts ← ((Format ' 'Part⊢)¨ ','Part⊢)¨ ';'Part⊢
 
 x ← +´1+/0=(+´0>[12,13,14]-⌈´)¨CountRGB¨¨Parts¨(⊑≢"Game X: ")↓¨d
 •Show x
+
+y ← +´ ×´¨ ⌈´¨ CountRGB¨¨Parts¨(⊑≢"Game X: ")↓¨d
+•Show y
