@@ -9,7 +9,7 @@
 
 using namespace std;
 
-tuple<vector<int>, vector<int>> parseLine(string str){
+tuple<vector<int>, vector<int>> parseline(string str){
     int colonPos = str.find(':'), pipePos = str.find('|');
     stringstream winning = stringstream(str.substr(colonPos + 1, pipePos - colonPos - 1));
     stringstream card = stringstream(str.substr(pipePos + 1));
@@ -28,14 +28,24 @@ tuple<vector<int>, vector<int>> parseLine(string str){
     return make_tuple(winningNums, cardNums);
 }
 
-vector<int> winning(vector<int> winning, vector<int> card){
-    vector<int> wins;
+int winning(vector<int> winning, vector<int> card){
+    int wins = 0;
     for(int c : card){
         if(find(winning.begin(), winning.end(), c) != winning.end()){
-            wins.push_back(c);
+            wins += 1;
         }
     }
     return wins;
+}
+
+int scorecard(int i, vector<tuple<vector<int>, vector<int>>> cards){
+    auto card = cards[i];
+    int wins = winning(get<0>(card), get<1>(card));
+    int score = wins;
+    for(int j = i + 1; j < i + wins + 1; j++){
+        score += scorecard(j, cards);
+    }
+    return score;
 }
 
 int main(){
@@ -45,19 +55,18 @@ int main(){
 
     int total = 0;
 
+    vector<tuple<vector<int>, vector<int>>> cards;
+
     while(getline(file, buf)){
-        auto pairs = parseLine(buf);
-        auto wins = winning(get<0>(pairs), get<1>(pairs));
-        for(auto win : wins){
-            cout << win << ' ';
-        }
-        cout << endl;
-        if(wins.size() > 0){
-            total += pow(2, wins.size() - 1);
-        }
+        cards.push_back(parseline(buf));
     }
 
-    cout << total;
+    for(int i = 0; i < cards.size(); i++){
+        cout << i << endl;
+        total += scorecard(i, cards);
+    }
+
+    cout << total + cards.size();
 
     return 0;
 }
